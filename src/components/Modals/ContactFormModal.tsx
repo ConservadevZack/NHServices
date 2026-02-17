@@ -9,13 +9,13 @@ import {
   useDisclosure,
   Input,
 } from "@nextui-org/react";
-import emailjs from "emailjs-com"; // Import the EmailJS library
+import emailjs from "emailjs-com";
 
 type ContactFormModalProps = {
   buttonText: string;
-  serviceId: string; // Add a prop for the EmailJS service ID
-  templateId: string; // Add a prop for the EmailJS template ID
-  userId: string; // Add a prop for the EmailJS user ID
+  serviceId: string;
+  templateId: string;
+  userId: string;
 };
 
 const ContactFormModal: React.FC<ContactFormModalProps> = ({
@@ -40,10 +40,9 @@ const ContactFormModal: React.FC<ContactFormModalProps> = ({
         message: (document.getElementById("message") as HTMLInputElement).value,
       };
 
-      // Add this part to create formData object with placeholders
       const emailData = {
-        to_name: "NH Services", // You can specify a default value or omit it if not needed
-        from_name: `${formData.firstName} ${formData.lastName}`, // Combine first name and last name
+        to_name: "NH Services",
+        from_name: `${formData.firstName} ${formData.lastName}`,
         email: formData.email,
         phoneNumber: formData.phoneNumber,
         message: formData.message,
@@ -52,7 +51,7 @@ const ContactFormModal: React.FC<ContactFormModalProps> = ({
       await emailjs.send(serviceId, templateId, emailData, userId);
 
       alert("Email sent successfully!");
-      onClose(); // Close the modal after successful submission
+      onClose();
     } catch (error) {
       console.error("Error sending email:", error);
       alert("Failed to send email. Please try again later.");
@@ -62,11 +61,9 @@ const ContactFormModal: React.FC<ContactFormModalProps> = ({
   return (
     <div className="flex flex-col gap-2 p-4 drop-shadow-xl">
       <Button
-        style={{
-          backgroundImage: "linear-gradient(to right,#54a0d7, #e75909 )",
-        }}
+        className="max-w-fit text-lg m-4 text-white font-semibold p-8 drop-shadow-lg bg-brand-gradient"
+        style={{ backgroundImage: "linear-gradient(to right, #54a0d7, #e75909)" }}
         onPress={onOpen}
-        className="max-w-fit text-lg m-4 text-white font-semibold p-8 drop-shadow-lg"
       >
         {buttonText}
       </Button>
@@ -109,7 +106,6 @@ const ContactFormModal: React.FC<ContactFormModalProps> = ({
               isRequired
               fullWidth
               size="lg"
-              className=""
               label="Message"
             />
           </ModalBody>

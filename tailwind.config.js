@@ -9,7 +9,15 @@ export default {
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "brand-blue": "#54a0d7",
+        "brand-orange": "#e75909",
+        "brand-darkGray": "#5A5858",
+        "brand-lightGray": "#D9D9D9",
+        "brand-yellow": "#FBC600",
+      },
+    },
   },
   plugins: [nextui()],
 };

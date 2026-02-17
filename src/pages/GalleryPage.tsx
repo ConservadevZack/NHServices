@@ -30,6 +30,22 @@ import GalleryImage18 from "../images/gallery/gallery18.jpg";
 import GalleryImage19 from "../images/gallery/gallery19.jpg";
 import GalleryImage20 from "../images/gallery/gallery20.jpg";
 import GalleryImage21 from "../images/gallery/gallery21.jpg";
+import GalleryImage22 from "../images/gallery/IMG_5627.jpeg";
+import GalleryImage23 from "../images/gallery/IMG_5665.jpeg";
+import GalleryImage24 from "../images/gallery/IMG_5786.jpeg";
+import GalleryImage25 from "../images/gallery/IMG_5929.jpeg";
+import GalleryImage26 from "../images/gallery/IMG_6101.jpeg";
+import GalleryImage27 from "../images/gallery/IMG_6199.jpeg";
+import GalleryImage28 from "../images/gallery/IMG_6201.jpeg";
+import GalleryImage29 from "../images/gallery/IMG_6714.jpeg";
+import GalleryImage30 from "../images/gallery/IMG_6737.jpeg";
+import GalleryImage31 from "../images/gallery/IMG_6922.jpeg";
+import GalleryImage32 from "../images/gallery/IMG_7071.jpeg";
+import GalleryImage33 from "../images/gallery/IMG_7465.jpeg";
+import GalleryImage34 from "../images/gallery/IMG_7467.jpeg";
+import GalleryImage35 from "../images/gallery/IMG_7468.jpeg";
+import GalleryImage36 from "../images/gallery/IMG_7469.jpeg";
+import GalleryImage37 from "../images/gallery/IMG_7686.jpeg";
 
 const imageArray: string[] = [
   GalleryImage1,
@@ -53,14 +69,30 @@ const imageArray: string[] = [
   GalleryImage19,
   GalleryImage20,
   GalleryImage21,
+  GalleryImage22,
+  GalleryImage23,
+  GalleryImage24,
+  GalleryImage25,
+  GalleryImage26,
+  GalleryImage27,
+  GalleryImage28,
+  GalleryImage29,
+  GalleryImage30,
+  GalleryImage31,
+  GalleryImage32,
+  GalleryImage33,
+  GalleryImage34,
+  GalleryImage35,
+  GalleryImage36,
+  GalleryImage37,
 ];
 
 const GalleryPage: React.FC = () => {
-  const [visibleImages, setVisibleImages] = useState(8); // Initially show 8 images
+  const [visibleImages, setVisibleImages] = useState(8);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  const imagesPerLoad = 8; // Number of images to load per click
+  const imagesPerLoad = 8;
 
   const loadMoreImages = () => {
     setVisibleImages((prevVisibleImages) =>
@@ -88,7 +120,7 @@ const GalleryPage: React.FC = () => {
         />
       </div>
       <h2 className="text-center font-bold text-4xl mb-4">Gallery</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-4 bg-gray-300 rounded-xl gap-4 justify-center p-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 bg-gray-300 rounded-xl gap-4 justify-center p-2">
         {imageArray.slice(0, visibleImages).map((imageUrl, index) => (
           <div key={index} className="mb-4">
             <div
@@ -98,7 +130,7 @@ const GalleryPage: React.FC = () => {
               <img
                 src={imageUrl}
                 alt={`Gallery ${index + 1}`}
-                className="w-full h-auto rounded-xl drop-shadow-xl p-2 mx-auto sm:w-[350px] sm:h-550px transition-transform transform hover:scale-105"
+                className="w-full aspect-[4/3] object-cover rounded-xl drop-shadow-xl p-2 mx-auto transition-transform transform hover:scale-105"
               />
             </div>
           </div>
@@ -107,10 +139,8 @@ const GalleryPage: React.FC = () => {
       {visibleImages < imageArray.length && (
         <div className="text-center my-4">
           <Button
-            className="w-1/2 sm:w-1/4 text-white font-semibold h-12 shadow-lg text-lg"
-            style={{
-              backgroundImage: "linear-gradient(to right,#54a0d7, #e75909 )",
-            }}
+            className="w-1/2 sm:w-1/4 text-white font-semibold h-12 shadow-lg text-lg bg-brand-gradient"
+            style={{ backgroundImage: "linear-gradient(to right, #54a0d7, #e75909)" }}
             onClick={loadMoreImages}
           >
             Load More

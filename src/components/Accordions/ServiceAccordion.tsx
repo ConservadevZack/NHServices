@@ -1,100 +1,63 @@
-import { useState } from "react";
-import { Accordion, AccordionItem } from "@nextui-org/react";
+import AccordionPanel from "./AccordionPanel";
+
+const serviceItems = [
+  {
+    title: "Installation Services",
+    content: (
+      <ul className="list-disc ml-4 text-brand-darkGray">
+        <li>Furnace Installations</li>
+        <li>Air Conditioner Installations</li>
+        <li>Water Heater Installation</li>
+        <li>Hybrid Water Heater Installation</li>
+        <li>Tankless Water Heater Installation</li>
+        <li>Ductless Mini Split Installation</li>
+        <li>Heat Pump Installation</li>
+        <li>Ductwork Installation and Repair</li>
+        <li>Humidifier Installation</li>
+        <li>Air Purifier Installation</li>
+        <li>Smart Thermostat Installation</li>
+      </ul>
+    ),
+  },
+  {
+    title: "Maintenance Services",
+    content: (
+      <ul className="list-disc ml-4 text-brand-darkGray">
+        <li>Maintenance for all Brands</li>
+        <li>Ductwork Cleaning</li>
+      </ul>
+    ),
+  },
+  {
+    title: "Real Estate Services",
+    content: (
+      <ul className="list-disc ml-4 text-brand-darkGray">
+        <li>Furnace and Air Conditioner Inspections</li>
+        <li>Inspection Resolution Repairs</li>
+        <li>Furnace Certifications</li>
+      </ul>
+    ),
+  },
+  {
+    title: "Swamp Cooler Services",
+    content: (
+      <ul className="list-disc ml-4 text-brand-darkGray">
+        <li>Swamp Cooler Installation and Repairs</li>
+        <li>Swamp Cooler Start Ups and Winterizing</li>
+      </ul>
+    ),
+  },
+];
 
 const ServiceAccordion = () => {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
-  const handleAccordionItemClick = (index: number) => {
-    setActiveIndex(index === activeIndex ? null : index);
-  };
-
   return (
-    <div className="mt-12 mr-10 ">
-      <div className="text-2xl text-center mb-4 font-bold underline text-[#5A5858]">
+    <div className="mt-6 sm:mt-8 md:mt-12">
+      <div className="text-2xl sm:text-3xl text-center mb-2 font-bold text-brand-darkGray">
         Our Services
       </div>
-      <Accordion className="">
-        <AccordionItem
-          key="installation-services"
-          title={
-            <span className="text-[#000000] font-semibold">
-              Installation Services
-            </span>
-          }
-          onPress={() => handleAccordionItemClick(0)}
-          className=""
-        >
-          <ul className="list-disc ml-4 text-[#5A5858]">
-            <li>Furnace Installations</li>
-            <li>Air Conditioner Installations</li>
-            <li>Water Heater Installation</li>
-            <li>Hybrid Water Heater Installation</li>
-            <li>Tankless Water Heater Installation</li>
-            <li>Ductless Mini Split Installation</li>
-            <li>Heat Pump Installation</li>
-            <li>Ductwork Installation and Repair</li>
-            <li>Humidifier Installation</li>
-            <li>Air Purifier Installation</li>
-            <li>Smart Thermostat Installation</li>
-          </ul>
-        </AccordionItem>
-        <AccordionItem
-          key="maintenance-services"
-          title=<span className="text-[#000000] font-semibold">
-            Maintenance Services
-          </span>
-          onPress={() => handleAccordionItemClick(1)}
-        >
-          <ul className="list-disc ml-4 text-[#5A5858]">
-            <li>Maintenance for all Brands</li>
-            <li>Ductwork Cleaning</li>
-          </ul>
-        </AccordionItem>
-        <AccordionItem
-          key="real-estate-services"
-          title=<span className="text-[#000000] font-semibold">
-            Real Estate Services
-          </span>
-          onPress={() => handleAccordionItemClick(2)}
-        >
-          <ul className="list-disc ml-4 text-[#5A5858]">
-            <li>Furnace and Air Conditioner Inspections</li>
-            <li>Inspection Resolution Repairs</li>
-            <li>Furnace Certifications</li>
-          </ul>
-        </AccordionItem>
-        <AccordionItem
-          key="swamp-cooler-services"
-          title=<span className="text-[#000000] font-semibold">
-            Swamp Cooler Services
-          </span>
-          onPress={() => handleAccordionItemClick(3)}
-        >
-          <ul className="list-disc ml-4 text-[#5A5858]">
-            <li>Swamp Cooler Installation and Repairs</li>
-            <li>Swamp Cooler Start Ups and Winterizing</li>
-          </ul>
-        </AccordionItem>
-        <AccordionItem
-          key="maintenance-agreements"
-          title=<span className="text-[#000000] font-semibold">
-            Maintenance Agreements
-          </span>
-          onPress={() => handleAccordionItemClick(4)}
-        >
-          <ul className="list-disc ml-4 text-[#5A5858]">
-            <li>
-              Discounts on Services for customers with a Maintenance Agreement
-            </li>
-          </ul>
-        </AccordionItem>
-      </Accordion>
-      <div
-        className="h-2 w-full sm:hidden mb-10"
-        style={{
-          backgroundImage: "linear-gradient(to right,#54a0d7, #e75909 )",
-        }}
-      ></div>
+      <div className="h-[2px] w-24 mx-auto bg-brand-gradient mb-4" />
+      <AccordionPanel items={serviceItems} />
+      <div className="section-divider sm:hidden mb-10" />
     </div>
   );
 };

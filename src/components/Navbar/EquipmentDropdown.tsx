@@ -90,7 +90,7 @@ const EquipmentDropdown = () => {
         </svg>
       </button>
       {isEquipmentDropdownOpen && (
-        <div className="sm:origin-top-right absolute mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+        <div className="sm:origin-top-right absolute mt-2 w-48 sm:w-56 max-w-[calc(100vw-2rem)] z-50 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
           <div
             className="py-1"
             role="menu"

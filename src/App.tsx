@@ -8,7 +8,7 @@ import "./App.css";
 function App() {
   return (
     <Router>
-      <div className="max-w-screen-xl mx-auto">
+      <div>
         <AppNavbar />
         <Routes>
           <Route path="/" element={<LandingPage />} />

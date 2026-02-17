@@ -34,7 +34,7 @@ const AppNavbar = () => {
   }, [navbarRef]);
 
   return (
-    <Navbar ref={navbarRef}>
+    <Navbar ref={navbarRef} maxWidth="full">
       <NavbarContent>
         <NavbarBrand>
           <Link to="/" className="nav-link">
@@ -56,23 +56,21 @@ const AppNavbar = () => {
       <NavbarMenu
         isOpen={isMenuOpen}
         onClose={closeMenu}
-        style={{ width: "60%" }}
+        className="w-3/4 sm:w-auto"
       >
         <div className="flex flex-col items-start">
-          {" "}
-          {/* Align text to the start */}
           {menuItems.map((item, index) => (
             <NavbarMenuItem key={index}>
               <Link
                 to={`/#${item.toLowerCase().replace(/\s+/g, "")}`}
                 className="w-full text-lg nav-link"
-                onClick={closeMenu} // Close menu when clicking on a menu item
+                onClick={closeMenu}
               >
                 {item}
               </Link>
             </NavbarMenuItem>
           ))}
-          <EquipmentDropdown /> {/* Add EquipmentDropdown component here */}
+          <EquipmentDropdown />
           <Link
             to="/gallery"
             className="w-full text-lg nav-link"
@@ -94,7 +92,6 @@ const AppNavbar = () => {
             </Link>
           </NavbarItem>
         ))}
-        {/* Add EquipmentDropdown component here */}
         <EquipmentDropdown />
         <Link to="/gallery" className="w-full text-md nav-link">
           Gallery
@@ -103,16 +100,17 @@ const AppNavbar = () => {
 
       <NavbarContent justify="end" className="hidden md:flex">
         <NavbarItem>
-          <span className="text-md text-center text-gray-500">
-            Call for a <span className="underline font-bold">FREE</span>{" "}
-            estimate:
-            <br />
+          <div className="flex flex-col items-center text-gray-500">
+            <span className="text-md text-center">
+              Call for a <span className="underline font-bold">FREE</span>{" "}
+              estimate:
+            </span>
             <a href="tel:13039051470" className="nav-link">
               <span className="text-lg font-bold text-gradient">
                 (303) 905-1470
               </span>
             </a>
-          </span>
+          </div>
         </NavbarItem>
       </NavbarContent>
     </Navbar>

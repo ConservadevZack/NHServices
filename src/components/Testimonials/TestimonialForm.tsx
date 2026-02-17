@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-import { Button, Input, Card } from "@nextui-org/react";
+import { motion } from "framer-motion";
+import { fadeInUp, viewportConfig } from "../../utils/animations";
+import { Button, Input } from "@nextui-org/react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -27,9 +29,7 @@ const StarRating: React.FC<StarRatingProps> = ({ value, onClick }) => {
           {star <= value ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className={`h-6 w-6 ${
-                value < star ? "text-gray-400" : "text-yellow-500"
-              } fill-current`}
+              className="h-7 w-7 text-yellow-500 fill-current"
               viewBox="0 0 24 24"
             >
               <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
@@ -37,15 +37,34 @@ const StarRating: React.FC<StarRatingProps> = ({ value, onClick }) => {
           ) : (
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className={`h-6 w-6 ${
-                value < star ? "text-gray-400" : "text-yellow-500"
-              } fill-current`}
+              className="h-7 w-7 text-gray-300"
               viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
             >
               <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
             </svg>
           )}
         </button>
+      ))}
+    </div>
+  );
+};
+
+const DisplayStars: React.FC<{ rating: number }> = ({ rating }) => {
+  return (
+    <div className="flex gap-1">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <svg
+          key={star}
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5"
+          viewBox="0 0 24 24"
+          fill={star <= rating ? "#FBBF24" : "#D1D5DB"}
+        >
+          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+        </svg>
       ))}
     </div>
   );
@@ -57,13 +76,14 @@ const TestimonialForm: React.FC = () => {
   const [message, setMessage] = useState<string>("");
   const [rating, setRating] = useState<number>(0);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
-        // Make a GET request to the Netlify function endpoint to fetch testimonials
         const response = await fetch(
-          "https://nhserviceshvac.com/.netlify/functions/getTestimonials"
+          "/.netlify/functions/getTestimonials"
         );
 
         if (response.ok) {
@@ -74,6 +94,9 @@ const TestimonialForm: React.FC = () => {
         }
       } catch (error) {
         console.error("Error:", error);
+        setFetchError("Unable to load reviews right now. Please try again later.");
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -95,9 +118,8 @@ const TestimonialForm: React.FC = () => {
     };
 
     try {
-      // Make a POST request to the Netlify function endpoint with the testimonial data
       const response = await fetch(
-        "https://nhserviceshvac.com/.netlify/functions/addTestimonial",
+        "/.netlify/functions/addTestimonial",
         {
           method: "POST",
           headers: {
@@ -110,7 +132,6 @@ const TestimonialForm: React.FC = () => {
       if (response.ok) {
         const data = await response.json();
         setTestimonials([...testimonials, data]);
-        // Clear form fields
         setFirstName("");
         setLastName("");
         setMessage("");
@@ -125,40 +146,129 @@ const TestimonialForm: React.FC = () => {
 
   const carouselSettings = {
     dots: true,
-    infinite: true,
+    infinite: testimonials.length > 1,
     speed: 2000,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: true,
+    autoplay: testimonials.length > 1,
     autoplaySpeed: 3000,
     responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
       {
         breakpoint: 768,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
-          initialSlide: 1,
+          initialSlide: 0,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          dots: false,
         },
       },
     ],
   };
 
+  const renderTestimonials = () => {
+    if (isLoading) {
+      return (
+        <div className="text-center text-brand-darkGray text-lg font-semibold py-8">
+          Loading reviews...
+        </div>
+      );
+    }
+
+    if (fetchError) {
+      return (
+        <div className="text-center py-8 px-4">
+          <p className="text-red-600 font-semibold text-lg">{fetchError}</p>
+        </div>
+      );
+    }
+
+    if (testimonials.length === 0) {
+      return (
+        <div className="text-center py-8 px-4">
+          <p className="text-brand-darkGray font-semibold text-lg">
+            No reviews yet &mdash; be the first!
+          </p>
+        </div>
+      );
+    }
+
+    return (
+      <Slider {...carouselSettings}>
+        {testimonials.map((testimonial) => (
+          <div key={testimonial._id} className="px-3 py-2">
+            <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8">
+              <DisplayStars rating={testimonial.rating} />
+              <p className="mt-4 text-gray-700 italic leading-relaxed text-base sm:text-lg">
+                &ldquo;{testimonial.message}&rdquo;
+              </p>
+              <p className="mt-4 font-bold text-brand-darkGray">
+                &mdash; {testimonial.firstName} {testimonial.lastName}
+              </p>
+            </div>
+          </div>
+        ))}
+      </Slider>
+    );
+  };
+
   return (
-    <div className="max-w-screen-xl mx-auto gap-10 flex flex-col-reverse sm:flex-row items-center justify-center">
-      <div className="w-full sm:w-1/2">
+    <div className="max-w-4xl mx-auto">
+      {/* Section Header */}
+      <motion.div
+        className="text-center mb-10"
+        variants={fadeInUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewportConfig}
+      >
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-brand-darkGray">
+          What Our Customers Say
+        </h2>
+        <div className="h-[3px] w-32 mx-auto bg-brand-gradient mt-3 rounded-full" />
+      </motion.div>
+
+      {/* Testimonial Carousel */}
+      <motion.div
+        className="mb-12"
+        variants={fadeInUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewportConfig}
+      >
+        {renderTestimonials()}
+      </motion.div>
+
+      {/* Review Form */}
+      <motion.div
+        variants={fadeInUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewportConfig}
+      >
         <form
-          style={{
-            backgroundImage: "linear-gradient(to right,#54a0d7, #e75909 )",
-          }}
-          className="rounded-lg p-2 flex-grow"
+          className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8"
           onSubmit={handleFormSubmit}
         >
-          <div className="bg-[#5A5858] gap-4 p-4 rounded-lg flex flex-col items-center">
-            <span className="text-white text-lg underline font-bold text-center mb-4">
-              Leave us a Review!
-            </span>
+          <h3 className="text-xl font-bold text-brand-darkGray text-center mb-6">
+            Leave Us a Review!
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             <Input
-              className="drop-shadow-lg"
+              className="drop-shadow-sm"
               fullWidth
               color="primary"
               size="sm"
@@ -167,7 +277,7 @@ const TestimonialForm: React.FC = () => {
               onChange={(e) => setFirstName(e.target.value)}
             />
             <Input
-              className="drop-shadow-lg"
+              className="drop-shadow-sm"
               fullWidth
               color="primary"
               size="sm"
@@ -175,8 +285,10 @@ const TestimonialForm: React.FC = () => {
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
             />
+          </div>
+          <div className="mb-4">
             <Input
-              className="drop-shadow-lg"
+              className="drop-shadow-sm"
               fullWidth
               color="primary"
               size="lg"
@@ -185,62 +297,21 @@ const TestimonialForm: React.FC = () => {
               onChange={(e) => setMessage(e.target.value)}
               maxLength={300}
             />
-            <div className="flex items-center mb-4">
-              <label className="block mr-2 text-white">Rate Us!:</label>
-              <StarRating value={rating} onClick={setRating} />
-            </div>
-            <Button
-              style={{
-                backgroundImage: "linear-gradient(to right,#54a0d7, #e75909 )",
-              }}
-              className="w-full h-12 drop-shadow-lg text-md"
-              type="submit"
-              color="primary"
-            >
-              Submit
-            </Button>
           </div>
+          <div className="flex items-center justify-center gap-2 mb-6">
+            <label className="text-brand-darkGray font-semibold">Rate Us:</label>
+            <StarRating value={rating} onClick={setRating} />
+          </div>
+          <Button
+            className="w-full h-12 drop-shadow-lg text-md text-white font-semibold"
+            style={{ backgroundImage: "linear-gradient(to right, #54a0d7, #e75909)" }}
+            type="submit"
+            color="primary"
+          >
+            Submit Review
+          </Button>
         </form>
-      </div>
-
-      <div className="w-full sm:w-1/2">
-        <div className="mt-4 p-8 sm:mt-0 sm:ml-auto sm:w-full">
-          <Slider {...carouselSettings}>
-            {testimonials.map((testimonial) => (
-              <div key={testimonial._id} className="p-4">
-                <Card
-                  style={{
-                    backgroundImage:
-                      "linear-gradient(to right,#54a0d7, #e75909 )",
-                  }}
-                  className="text-white p-2 rounded-lg shadow-lg w-full"
-                >
-                  <div className="bg-[#5A5858] p-4">
-                    <h3 className="text-xl font-bold underline">{`${testimonial.firstName} ${testimonial.lastName}`}</h3>
-                    <p className="mt-2 p-4 overflow-auto">
-                      "{testimonial.message}"
-                    </p>
-                    <div className="flex justify-end gap-2 items-end">
-                      Rating:
-                      {[...Array(testimonial.rating)].map((_, i) => (
-                        <svg
-                          key={i}
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5"
-                          viewBox="0 0 24 24"
-                          fill="#FBBF24" // Changed color to yellow
-                        >
-                          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                        </svg>
-                      ))}
-                    </div>
-                  </div>
-                </Card>
-              </div>
-            ))}
-          </Slider>
-        </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

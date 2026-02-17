@@ -1,79 +1,65 @@
-import { useState } from "react";
-import { Accordion, AccordionItem } from "@nextui-org/react";
+import { motion } from "framer-motion";
+import { fadeInUp, viewportConfig } from "../../utils/animations";
+import AccordionPanel from "./AccordionPanel";
+
+const faqItems = [
+  {
+    title: "How long does a furnace or air conditioner last?",
+    content: (
+      <span className="text-brand-darkGray font-semibold">
+        Average life expectancy of a furnace or air conditioner is 15-18 years.
+      </span>
+    ),
+  },
+  {
+    title: "How often should we do maintenance on our equipment?",
+    content: (
+      <span className="text-brand-darkGray font-semibold">Every year.</span>
+    ),
+  },
+  {
+    title: "How often should we change the air filter?",
+    content: (
+      <span className="text-brand-darkGray font-semibold">
+        Every 3 months or as needed.
+      </span>
+    ),
+  },
+  {
+    title: "Should we have the air ducts cleaned?",
+    content: (
+      <span className="text-brand-darkGray font-semibold">
+        Yes, every 5-8 years.
+      </span>
+    ),
+  },
+  {
+    title: "Are digital thermostats more energy efficient?",
+    content: (
+      <span className="text-brand-darkGray font-semibold">
+        Yes, they are more accurate and only run a selected amount of cycles per
+        hour to improve efficiency.
+      </span>
+    ),
+  },
+];
 
 const FAQAccordion = () => {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
-  const handleAccordionItemClick = (index: number) => {
-    setActiveIndex(index === activeIndex ? null : index);
-  };
-
   return (
-    <div className="mt-4 ">
-      <div className="text-2xl text-center mb-4 font-bold underline text-[#5A5858]">
+    <motion.div
+      className="mt-4"
+      variants={fadeInUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={viewportConfig}
+      style={{ overflow: "visible" }}
+    >
+      <div className="text-2xl sm:text-3xl text-center mb-2 font-bold text-brand-darkGray">
         F.A.Q
       </div>
-      <Accordion className="">
-        <AccordionItem
-          key="installation-services"
-          title={
-            <span className="text-[#000000] font-semibold">
-              How long does a furnace or air conditioner last?
-            </span>
-          }
-          onPress={() => handleAccordionItemClick(0)}
-          className=""
-        >
-          <span className="text-[#5A5858] font-semibold">
-            Average life expectancy of a furnace or air conditioner is 15-18
-            years.
-          </span>
-        </AccordionItem>
-        <AccordionItem
-          key="maintenance-services"
-          title=<span className="text-[#000000] font-semibold">
-            How often should we do maintenance on our equipment?
-          </span>
-          onPress={() => handleAccordionItemClick(1)}
-        >
-          <span className="text-[#5A5858] font-semibold">Every year.</span>
-        </AccordionItem>
-        <AccordionItem
-          key="real-estate-services"
-          title=<span className="text-[#000000] font-semibold">
-            How often should we change the air filter?
-          </span>
-          onPress={() => handleAccordionItemClick(2)}
-        >
-          <span className="text-[#5A5858] font-semibold">
-            Every 3 months or as needed.
-          </span>
-        </AccordionItem>
-        <AccordionItem
-          key="swamp-cooler-services"
-          title=<span className="text-[#000000] font-semibold">
-            Should we have the air ducts cleaned?
-          </span>
-          onPress={() => handleAccordionItemClick(3)}
-        >
-          <span className="text-[#5A5858] font-semibold">
-            Yes, every 5-8 years.
-          </span>
-        </AccordionItem>
-        <AccordionItem
-          key="maintenance-agreements"
-          title=<span className="text-[#000000] font-semibold">
-            Are digital thermostats more energy efficient?
-          </span>
-          onPress={() => handleAccordionItemClick(4)}
-        >
-          <span className="text-[#5A5858] font-semibold">
-            Yes, they are more accurate and only run a selected amount of cycles
-            per hour to improve efficiency.
-          </span>
-        </AccordionItem>
-      </Accordion>
-    </div>
+      <div className="h-[2px] w-24 mx-auto bg-brand-gradient mb-6" />
+      <AccordionPanel items={faqItems} />
+    </motion.div>
   );
 };
 
